@@ -84,3 +84,17 @@ class KMeanClusterer():
       res += ((obs[i] - centroid[i]) ** 2) / (self.max[i] - self.min[i])
 
     return math.sqrt(res)
+
+  def wc(self):
+    res = 0
+    for cluster in self.clusters:
+      for obs in cluster.observations:
+        res += self.computeDistance(cluster.centroid, obs)
+    return res
+
+  def bc(self):
+    res = 0
+    for cluster1 in self.clusters:
+      for cluster2 in self.clusters:
+        res += self.computeDistance(cluster1.centroid, cluster2.centroid)
+    return res
