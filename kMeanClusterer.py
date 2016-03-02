@@ -36,7 +36,7 @@ class KMeanClusterer():
 
 
     obs_np = np.array(self.observations)
-    if self.col_class:
+    if self.col_class != -1:
       obs_np = np.delete(obs_np, self.col_class, 1)
     obs_np = obs_np.astype(np.float)
     self.min = obs_np.min(axis=0).tolist()
@@ -77,7 +77,7 @@ class KMeanClusterer():
 
   def computeDistance(self, obs, centroid):
     obs = np.array(obs)
-    if self.col_class and self.col_class < len(obs):
+    if self.col_class != -1 and self.col_class < len(obs):
       obs = np.delete(obs, self.col_class)
     obs = obs.astype(np.float)
 
@@ -105,7 +105,7 @@ class KMeanClusterer():
     return res
 
   def check_class(self):
-    if self.col_class:
+    if self.col_class != -1:
       observations = np.array(self.observations)
       class_names = observations[:,self.col_class]
       class_names = np.unique(class_names)

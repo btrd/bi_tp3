@@ -11,7 +11,7 @@ class Cluster():
 
   def updateCentroid(self):
     obs_np = np.array(self.observations)
-    if self.col_class:
+    if self.col_class != -1:
       obs_np = np.delete(obs_np, self.col_class, 1)
     obs_np = obs_np.astype(np.float)
     self.centroid = obs_np.mean(axis=0).tolist()
