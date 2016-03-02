@@ -6,13 +6,14 @@ from cluster import Cluster
 
 class KMeanClusterer():
 
-  def __init__(self, k, datafile):
+  def __init__(self, k, datafile, num_class):
     self.clusterNumber = k
     self.clusters = []
     self.datafile = datafile
     self.observations = []
     self.min = []
     self.max = []
+    self.col_class = num_class
     self.initialization()
 
     while self.assignement():
@@ -21,7 +22,7 @@ class KMeanClusterer():
 
   def initialization(self):
     for x in xrange(0, self.clusterNumber):
-      c = Cluster(x)
+      c = Cluster(self.col_class)
       self.clusters.append(c)
 
     iris_data_matrix = self.load_csv(self.datafile)
@@ -35,6 +36,8 @@ class KMeanClusterer():
 
 
     obs_np = np.array(self.observations)
+    if self.col_class:
+      obs_np = np.delete(obs_np, self.col_class, 1)
     obs_np = obs_np.astype(np.float)
     self.min = obs_np.min(axis=0).tolist()
     self.max = obs_np.max(axis=0).tolist()
@@ -53,12 +56,12 @@ class KMeanClusterer():
 
   def assignement(self):
     res = False
-    for c in self.clusters:
-      for obs in c.observations:
+    for cluster in self.clusters:
+      for obs in cluster.observations:
         nearestCluster = self.nearestCluster(obs)
-        if not nearestCluster.equals(c):
+        if not nearestCluster.equals(cluster):
           nearestCluster.addObservation(obs)
-          c.deleteObservation(obs)
+          cluster.deleteObservation(obs)
           res = True
     return res
 
@@ -74,6 +77,8 @@ class KMeanClusterer():
 
   def computeDistance(self, obs, centroid):
     obs = np.array(obs)
+    if self.col_class and self.col_class < len(obs):
+      obs = np.delete(obs, self.col_class)
     obs = obs.astype(np.float)
 
     centroid = np.array(centroid)
@@ -89,7 +94,7 @@ class KMeanClusterer():
     res = 0
     for cluster in self.clusters:
       for obs in cluster.observations:
-        res += self.computeDistance(cluster.centroid, obs)
+        res += self.computeDistance(obs, cluster.centroid)
     return res
 
   def bc(self):
