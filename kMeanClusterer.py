@@ -103,3 +103,20 @@ class KMeanClusterer():
       for cluster2 in self.clusters:
         res += self.computeDistance(cluster1.centroid, cluster2.centroid)
     return res
+
+  def check_class(self):
+    if self.col_class:
+      observations = np.array(self.observations)
+      class_names = observations[:,self.col_class]
+      class_names = np.unique(class_names)
+      print(class_names)
+
+      j = 0
+      for cluster in self.clusters:
+        count_class = [0] * len(class_names)
+        for obs in cluster.observations:
+          for i in xrange(0,len(class_names)):
+            if obs[self.col_class] == class_names[i]:
+              count_class[i] += 1
+        print("Cluster " + str(j) + " : " + str(count_class))
+        j += 1

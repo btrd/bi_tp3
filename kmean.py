@@ -12,3 +12,4 @@ if __name__ == "__main__":
   print("BC:\t" + str(kMeanClusterer.bc()))
   print("WC:\t" + str(kMeanClusterer.wc()))
   print("WC/BC: \t" + str(kMeanClusterer.bc()/kMeanClusterer.wc()))
+  kMeanClusterer.check_class()
